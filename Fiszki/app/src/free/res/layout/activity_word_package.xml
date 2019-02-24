@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:id="@+id/wordpackageDL"
+    android:layout_height="match_parent"
+    >
+    <LinearLayout
+        android:id="@+id/wordpackageFLchange"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+        <com.fiszki.Adapter.SwipeListView
+            android:splitMotionEvents="false"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:id="@+id/wordpackageSLV">
+        </com.fiszki.Adapter.SwipeListView>
+        <fragment
+            android:id="@+id/wordpackage_banner"
+            class="com.fiszki.free.BannerFragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+
+
+
+</android.support.v4.widget.DrawerLayout>

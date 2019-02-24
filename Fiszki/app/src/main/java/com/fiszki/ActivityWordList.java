@@ -17,6 +17,9 @@ import android.widget.TextView;
 import com.fiszki.Adapter.OnSwipeListItemClickListener;
 import com.fiszki.Adapter.SwipeListAdapter;
 import com.fiszki.Adapter.SwipeListView;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
 
 import java.util.ArrayList;
 
@@ -30,11 +33,18 @@ public class ActivityWordList extends Activity {
     private StringToJSON        zlobp;
     private String              package_name,flag_source;
     private int                 package_own;
+    private InterstitialAd      interstitialAd;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_word_list);
+
+        AdRequest adRequest = new AdRequest.Builder().build();
+        interstitialAd = new InterstitialAd(this);
+        interstitialAd.setAdUnitId(getString(R.string.add_id));
+        interstitialAd.loadAd(adRequest);
 
         //pobieranie z bazy wszystkich slow
         Intent intent = getIntent();
@@ -103,21 +113,15 @@ public class ActivityWordList extends Activity {
                         myDB.deleteTableWordsRow(i);
                         onDestroy();
                         onCreate(Bundle.EMPTY);
-
-
-
-
                         break;
                 }
             }
         },new int[]{R.id.modify,R.id.delete});
-
         mswipelistAdapter = new ListAdapter(mswipeArraylistData);
         mswipelistView.setAdapter(mswipelistAdapter);
         getWindow().setAllowEnterTransitionOverlap(false);
 
     }//onCreate
-
     //pobieranie z bazy wszystkich slow
 
     private void LoadDataDB() {
@@ -183,12 +187,25 @@ public class ActivityWordList extends Activity {
         if (myDB.getTableWordsOKLenght()>0) {
             alertDialog();
         }else{
-            Intent intencja =new Intent(ActivityWordList.this,ActivityWords.class);
-            intencja.putExtra("mmsgdlg",true);
-           // Log.d("package_name = ","package_namewys = "+package_name);
+            final Intent intent =new Intent(ActivityWordList.this,ActivityWords.class);
+            intent.putExtra("mmsgdlg",true);
+            if (BuildConfig.PAID_VERSION==false) {
+                if (interstitialAd.isLoaded() || interstitialAd.isLoading()) {
+                    interstitialAd.show();
+                    interstitialAd.setAdListener(new AdListener() {
+                        @Override
+                        public void onAdClosed() {
+                            // Code to be executed when the interstitial ad is closed.
+                            startActivity(intent);
+                        }
 
-         //   intencja.putExtra("package_name",package_name);
-            startActivity(intencja);
+                    });
+                } else {
+                    startActivity(intent);
+                }
+            }else{
+                startActivity(intent);
+            }
 
         }
     }
@@ -203,10 +220,25 @@ public class ActivityWordList extends Activity {
         builder.setPositiveButton(yes, new DialogInterface.OnClickListener() {
 
             public void onClick(DialogInterface dialog, int which) {
-                Intent intencja =new Intent(ActivityWordList.this,ActivityWords.class);
-                intencja.putExtra("mmsgdlg",true);
-                startActivity(intencja);
+                final Intent intent =new Intent(ActivityWordList.this,ActivityWords.class);
+                intent.putExtra("mmsgdlg",true);
+                if (BuildConfig.PAID_VERSION==false) {
+                    if (interstitialAd.isLoaded() || interstitialAd.isLoading()) {
+                        interstitialAd.show();
+                        interstitialAd.setAdListener(new AdListener() {
+                            @Override
+                            public void onAdClosed() {
+                                // Code to be executed when the interstitial ad is closed.
+                                startActivity(intent);
+                            }
 
+                        });
+                    } else {
+                        startActivity(intent);
+                    }
+                }else{
+                    startActivity(intent);
+                }
                 dialog.dismiss();
             }
 
@@ -285,15 +317,12 @@ public class ActivityWordList extends Activity {
     protected void onDestroy() {
         super.onDestroy();
            zlobp = new StringToJSON(package_name);
-           Log.d("mswipeArraylistData = ","onDestroy"+mswipeArraylistData+"sprawadz = ");
-           Log.d("package_name = ","package_name = "+package_name);
         String mfolder ="";
         if (package_own==0) {
             String arr[] = flag_source.split("/", 3);
             mfolder = arr[1];
         }
            zlobp.SaveDATA(mswipeArraylistData,mfolder);
-       // Log.d("package_name = ","package_name22 = "+package_name+"onDestroy = "+"testresume"+sprawadz);
         closeDB();
     }
 
@@ -310,7 +339,6 @@ public class ActivityWordList extends Activity {
     @Override
     protected void onRestart() {
         super.onRestart();
-        Log.d("onRester","onRester");
         onCreate(Bundle.EMPTY);
     }
 }

@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "615790872904",
+    "firebase_url": "https://fiszki-100a8.firebaseio.com",
+    "project_id": "fiszki-100a8",
+    "storage_bucket": "fiszki-100a8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:615790872904:android:3da0fec357ca7937",
+        "android_client_info": {
+          "package_name": "com.fiszki.free"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "615790872904-5sdr1i5sgnpbd37ps7c529uv1jqcse76.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.fiszki.free",
+            "certificate_hash": "fe6ec4ba1c816ab019208e6a8ee384b2ecfd4ce1"
+          }
+        },
+        {
+          "client_id": "615790872904-mdie1rdolflq3objrl1004vjmm342j2c.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCEMi4TyyV_CgBNm4xHMLy6U0lWpBCg6Lo"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "615790872904-mdie1rdolflq3objrl1004vjmm342j2c.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

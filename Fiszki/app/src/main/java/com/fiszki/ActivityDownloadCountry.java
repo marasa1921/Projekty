@@ -4,33 +4,22 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.Activity;
-import android.app.DownloadManager;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.MenuItem;
-import android.webkit.MimeTypeMap;
-import android.webkit.URLUtil;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -41,8 +30,6 @@ import java.net.URL;
 
 public class ActivityDownloadCountry extends Activity {
     private static final int                mWRITE_EXTERNAL_STORAGE_REQUEST_CODE = 54654;
-    private DownloadManager                 mdownloadManager;
-    long                                    mqueueid;
     private RecyclerView                    mRVcountry;
     private String                          msiglerowJSON="",mdataJSON="";
     private String []                       mDowloadCountryDescrition;

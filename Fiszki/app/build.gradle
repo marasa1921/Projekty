@@ -1,13 +1,20 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.google.gms.google-services'
 
 android {
+    signingConfigs {
+        config {
+            keyAlias ''
+            keyPassword ''
+        }
+    }
     compileSdkVersion 28
     defaultConfig {
-        applicationId "com.fiszki"
         minSdkVersion 21
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
+        flavorDimensions "default"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -15,6 +22,21 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+    }
+    productFlavors {
+        free {
+            applicationId "com.fiszki.free"
+            versionName "1.0 - free"
+            buildConfigField "boolean", "PAID_VERSION", "false"
+
+        }
+        paid {
+            applicationId "com.fiszki.paid"
+            versionName "1.0 - paid"
+            buildConfigField "boolean", "PAID_VERSION", "true"
+
+        }
+
     }
 }
 
@@ -27,9 +49,12 @@ dependencies {
     implementation 'com.hudomju:swipe-to-dismiss-undo:1.0'
     implementation 'com.android.support:transition:28.0.0'
     implementation 'com.google.android.gms:play-services-ads:12.0.1'
+    implementation 'com.google.firebase:firebase-ads:15.0.1'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     implementation 'org.jetbrains:annotations-java5:15.0'
-
-
+    implementation 'com.google.firebase:firebase-core:16.0.7'
+    implementation 'com.google.android.gms:play-services-ads:17.1.3'
+    implementation 'com.google.code.gson:gson:2.8.5'
 }
+

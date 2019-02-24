@@ -2,25 +2,25 @@ package com.fiszki;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.Dialog;
-import android.app.DownloadManager;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -38,39 +38,42 @@ import java.net.SocketAddress;
 import java.net.URL;
 
 public class MainActivity extends Activity {
-    private String []                       mMainMenuNames;
-    private int []                          mMainMenuImgsrc;
-    private RecyclerView                    mRVlenguage;
-    private CaptionedImagesAdapterMain      mcaptionedImagesAdapter;
-    private String                          msiglerowJSON="",mdataJSON="";
-    private String []                       mDowloadCountryDescrition;
-    private String []                       mDowloadCountryImgsrc;
-    boolean                                 connected = false;
-    private String                          mleftmenustrings [];
-    private ListView                        mdrawerlsvt;
-    private DrawerLayout                    mDL;
-    private ActionBarDrawerToggle           mdrawerToggle;
+    private String[] mMainMenuNames;
+    private int[] mMainMenuImgsrc;
+    private RecyclerView mRVlenguage;
+    private CaptionedImagesAdapterMain mcaptionedImagesAdapter;
+    private String msiglerowJSON = "", mdataJSON = "";
+    private String[] mDowloadCountryDescrition;
+    private String[] mDowloadCountryImgsrc;
+    boolean connected = false;
+    private String mleftmenustrings[];
+    private ListView mdrawerlsvt;
+    private DrawerLayout mDL;
+    private ActionBarDrawerToggle mdrawerToggle;
+    private InterstitialAd interstitialAd;
     ///Okno dialogowe do wprowadzania - CREATE
 
-    private class DrawerItemClickListener implements ListView.OnItemClickListener {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            // Kod wykonywany po kliknięciu elementu w szufladzie nawigacyjnej
-            selectItem(position);
-        }
-    }
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         getActionBar().setTitle("");
-
         getActionBar().setDisplayHomeAsUpEnabled(true);
-
         getActionBar().setHomeButtonEnabled(true);
-
         getListFromServer();
 
+        // W zależnosci od wersji sa wyswietlane reklamy
+        if (BuildConfig.PAID_VERSION) {// this is the flag configured in build.gradle
+            getActionBar().setTitle("");
+        } else {
+            getActionBar().setTitle("Free Version");
+
+            //fullscreen
+            AdRequest adRequestfullscreen = new AdRequest.Builder().build();
+            interstitialAd = new InterstitialAd(this);
+            interstitialAd.setAdUnitId(getString(R.string.add_id));
+            interstitialAd.loadAd(adRequestfullscreen);
+
+        }
 
 
 
@@ -81,7 +84,7 @@ public class MainActivity extends Activity {
         mdrawerlsvt.setAdapter(new ArrayAdapter<String>(this,android.R.layout.simple_list_item_activated_1,mleftmenustrings));
         mdrawerlsvt.setOnItemClickListener(new DrawerItemClickListener());
         mdrawerToggle = new ActionBarDrawerToggle(this,mDL,
-                R.string.app_add,R.string.app_add){
+                R.string.app_name,R.string.app_name){
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -100,12 +103,20 @@ public class MainActivity extends Activity {
         mDL.setDrawerListener(mdrawerToggle);
     }
 
+
+    private class DrawerItemClickListener implements ListView.OnItemClickListener {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            // Kod wykonywany po kliknięciu elementu w szufladzie nawigacyjnej
+            selectItem(position);
+        }
+    }
+
     //Rozwijane menu selectItem
     private void selectItem(int position) {
 
         switch (position) {
             case 0:
-
                 Toast.makeText(getBaseContext(), "GALKA SPIOCH", Toast.LENGTH_SHORT).show();
                 break;
 
@@ -211,9 +222,25 @@ public class MainActivity extends Activity {
                             Intent intent = new Intent(getBaseContext(), ActivityWordPackage.class);
                             startActivity(intent);
                         }if (position>0&&connected){
+                            final Intent intent = new Intent(getBaseContext(), ActivityDownloadCountry.class);
+                            if (BuildConfig.PAID_VERSION==false) {
+                                if (interstitialAd.isLoaded() || interstitialAd.isLoading()) {
+                                    interstitialAd.show();
+                                    interstitialAd.setAdListener(new AdListener() {
+                                        @Override
+                                        public void onAdClosed() {
+                                            // Code to be executed when the interstitial ad is closed.
+                                            startActivity(intent);
+                                        }
 
-                            Intent intent = new Intent(getBaseContext(),ActivityDownloadCountry.class);
-                            startActivity(intent);
+                                    });
+                                } else {
+                                    startActivity(intent);
+                                }
+                            }else{
+                                startActivity(intent);
+                            }
+
                         }
                     }
                 });

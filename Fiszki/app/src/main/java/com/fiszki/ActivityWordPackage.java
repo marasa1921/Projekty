@@ -42,7 +42,7 @@ public class ActivityWordPackage extends Activity {
             listDataadd();
 
         //////////////////////////////////
-        mswipemenulistView = (SwipeListView) findViewById(R.id.wordpackageSLV);
+        mswipemenulistView = findViewById(R.id.wordpackageSLV);
         mswipemenulistView.setListener(new OnSwipeListItemClickListener() {
             @Override
             public void OnClick(View view, int index) {

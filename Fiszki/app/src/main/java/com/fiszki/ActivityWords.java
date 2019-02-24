@@ -5,21 +5,12 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
-import android.support.transition.Transition;
-import android.transition.Explode;
-import android.transition.Fade;
-import android.transition.TransitionInflater;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
-import android.view.animation.AnticipateOvershootInterpolator;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.transition.Slide;
 import android.widget.ViewFlipper;
 
 

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_add">FISZKI</string>
+    <string name="app_name">FISZKI</string>
 
     <string-array name="homemenu">
         <item>Info</item>
@@ -7,11 +7,10 @@
     </string-array>
     <string name="ipadres">maras1921.cba.pl</string>
     <string name="downloadadres">http://maras1921.cba.pl/</string>
-    <string name="activitywordssounderror"></string>
     <string name="addpackagename">Dodaj nowy pakiet</string>
     <string name="addpackageERROR">BRAK NAZWY</string>
     <string name="addpackageBT">DODAJ</string>
-    <string name="addpackageET">Nazwa pakietu ...</string>
+    <string name="addpackageET">Nazwa pakietu …</string>
     <string name="addpackageMENU">Dodaj pakiet</string>
     <string name="textview">Text</string>
     <string name="answer">Text</string>
@@ -27,5 +26,8 @@
     <string name="BTwordlist">NAUKA</string>
     <string name="serviceComplete">Pakiet słówek został pobrany</string>
     <string name="wordslloadall">Czy chcesz wczytać wszystkie słówka?</string>
+    <string name="add_id">ca-app-pub-3203507537754608/4916949218</string>
+    <string name="activitywordssounderror">speach error</string>
+    <string name="bannersoure">ca-app-pub-3203507537754608/1815610322</string>
 
 </resources>

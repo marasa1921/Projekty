@@ -141,7 +141,7 @@ public class DownloadSongService extends IntentService {
                 stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
         Notification notification = new Notification.Builder(this)
                 .setSmallIcon(R.drawable.ic_launcher_foreground)
-                .setContentTitle(getString(R.string.app_add))
+                .setContentTitle(getString(R.string.app_name))
                 .setAutoCancel(true)
                 .setPriority(Notification.PRIORITY_MAX)
                 .setContentIntent(pendingIntent)
