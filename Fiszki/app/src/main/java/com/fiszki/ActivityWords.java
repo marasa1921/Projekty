@@ -27,7 +27,6 @@ public class ActivityWords extends Activity {
     private     String      mword1,mword2;
     private     boolean     mmsgdlg;
     private     Intent      mintencja;
-    private     String      package_name;
     private     boolean     mTVlg2clicked=true;
 
 
@@ -35,7 +34,6 @@ public class ActivityWords extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_words);
-            package_name =getIntent().getStringExtra("package_name");
             mintencja = getIntent();
             mmsgdlg = mintencja.getExtras().getBoolean("mmsgdlg");
 

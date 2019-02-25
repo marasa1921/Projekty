@@ -1,27 +1,25 @@
-package com.fiszki;
 
-import android.app.Activity;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.database.Cursor;
-import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TextView;
+        package com.fiszki;
 
-import com.fiszki.Adapter.OnSwipeListItemClickListener;
-import com.fiszki.Adapter.SwipeListAdapter;
-import com.fiszki.Adapter.SwipeListView;
-import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.InterstitialAd;
+        import android.app.Activity;
+        import android.content.DialogInterface;
+        import android.content.Intent;
+        import android.database.Cursor;
+        import android.os.Bundle;
+        import android.support.v7.app.AlertDialog;
+        import android.util.Log;
+        import android.view.Menu;
+        import android.view.MenuItem;
+        import android.view.View;
+        import android.view.ViewGroup;
+        import android.widget.Button;
+        import android.widget.TextView;
 
-import java.util.ArrayList;
+        import com.fiszki.Adapter.OnSwipeListItemClickListener;
+        import com.fiszki.Adapter.SwipeListAdapter;
+        import com.fiszki.Adapter.SwipeListView;
+
+        import java.util.ArrayList;
 
 public class ActivityWordList extends Activity {
     /////////SLIDE MENU///////////////
@@ -30,21 +28,14 @@ public class ActivityWordList extends Activity {
     private ArrayList<Packages> mswipeArraylistData;
     private DBAdapter           myDB;
     private Cursor              mcursor;
-    private StringToJSON        zlobp;
+    private StringToJSON        stringToJSON;
     private String              package_name,flag_source;
     private int                 package_own;
-    private InterstitialAd      interstitialAd;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_word_list);
-
-        AdRequest adRequest = new AdRequest.Builder().build();
-        interstitialAd = new InterstitialAd(this);
-        interstitialAd.setAdUnitId(getString(R.string.add_id));
-        interstitialAd.loadAd(adRequest);
 
         //pobieranie z bazy wszystkich slow
         Intent intent = getIntent();
@@ -53,26 +44,17 @@ public class ActivityWordList extends Activity {
             flag_source = intent.getStringExtra("flag_source");
             package_own = intent.getExtras().getInt("package_own");
         }
-        Log.d("Bundle = ","Bundle package_name = "+package_name);
-        Log.d("Bundle = ","Bundle package_own = "+package_own);
-
-        // ładowanie nazwy pakietu po restarcie aktywności
-        if (savedInstanceState !=null){
-            Log.d("Bundle = ","Bundle package_name22 = "+package_name);
-            package_name=savedInstanceState.getString("package_name");
-        }
         // ładowanie pliku językowego do bazy pliku JSON-a
         if (package_name!=null){
             if (package_own == 1) {
-                Log.d("111 package_name = ", "package_name = " + package_name);
-                zlobp = new StringToJSON(package_name);
-                mswipeArraylistData = zlobp.LoadDATAown();
+                stringToJSON = new StringToJSON(package_name);
+                mswipeArraylistData = stringToJSON.LoadDATAown();
                 insertDataDB();
                 LoadDataDB();
             }else if (package_own == 0) {
                 Log.d("Bundle = ","Bundle flag_source = "+flag_source);
-                zlobp = new StringToJSON(package_name);
-                mswipeArraylistData = zlobp.LoadDATAfromServer(flag_source); /////!!!!!
+                stringToJSON = new StringToJSON(package_name);
+                mswipeArraylistData = stringToJSON.LoadDATAfromServer(flag_source); /////!!!!!
                 insertDataDB();
                 LoadDataDB();
             }
@@ -80,13 +62,13 @@ public class ActivityWordList extends Activity {
         // odtworzenie nazwy pakietu językowego i ładowanie do bazy
         else  {
             Log.d("package_name = ","VviewHolder = "+package_name);
-            package_name= ViewHolder.package_name;
-            flag_source= ViewHolder.flag_source;
-            package_own= ViewHolder.package_own;
+            package_name= ZDataPackage.package_name;
+            flag_source= ZDataPackage.flag_source;
+            package_own= ZDataPackage.package_own;
             LoadDataDB();
         }
 
-    //  ustawienie SwipeListView
+        //  ustawienie SwipeListView
         mswipelistView = (SwipeListView) findViewById(R.id.listView);
         mswipelistView.setListener(new OnSwipeListItemClickListener() {
             @Override
@@ -107,7 +89,6 @@ public class ActivityWordList extends Activity {
                         startActivity(intent);
                         break;
                     case R.id.delete:
-
                         mcursor.moveToPosition(index);
                         long i = mcursor.getLong(0);
                         myDB.deleteTableWordsRow(i);
@@ -117,11 +98,13 @@ public class ActivityWordList extends Activity {
                 }
             }
         },new int[]{R.id.modify,R.id.delete});
+
         mswipelistAdapter = new ListAdapter(mswipeArraylistData);
         mswipelistView.setAdapter(mswipelistAdapter);
         getWindow().setAllowEnterTransitionOverlap(false);
 
     }//onCreate
+
     //pobieranie z bazy wszystkich slow
 
     private void LoadDataDB() {
@@ -145,19 +128,8 @@ public class ActivityWordList extends Activity {
     private void insertDataDB() {
         openDB();
         myDB.deleteTableWordsAll();
-        //mcursor = myDB.getTableWordsAllRows();
-       /* if (mcursor.moveToFirst()){
-            do {
-                Packages packages = new Packages();
-                packages.word = mcursor.getString(1);
-                packages.desc = mcursor.getString(2);
-                packages.ok = mcursor.getInt(3);
-             //   mswipeArraylistData.add(packages);
-
-            }while (mcursor.moveToNext());
-        } */
-       mcursor=myDB.getTableWordsAllRows();
-       mcursor.moveToFirst();
+        mcursor=myDB.getTableWordsAllRows();
+        mcursor.moveToFirst();
         for (int i = 0; i <mswipeArraylistData.size() ; i++) {
             myDB.insertTableWordstRow(mswipeArraylistData.get(i).word,mswipeArraylistData.get(i).desc,mswipeArraylistData.get(i).ok);
             mcursor.moveToNext();
@@ -175,7 +147,6 @@ public class ActivityWordList extends Activity {
         switch (item.getItemId()){
             case R.id.mainBTadd:
                 Intent i = new Intent(getBaseContext(),ActivityAddWord.class);
-              //  i.putExtra("package_name",package_name);
                 startActivity(i);
         }
         return super.onOptionsItemSelected(item);
@@ -184,33 +155,22 @@ public class ActivityWordList extends Activity {
     // przejscie do aktywnosci powtarzajacej slowka
     public void onClickWords(View view) {
 
-        if (myDB.getTableWordsOKLenght()>0) {
-            alertDialog();
-        }else{
-            final Intent intent =new Intent(ActivityWordList.this,ActivityWords.class);
-            intent.putExtra("mmsgdlg",true);
-            if (BuildConfig.PAID_VERSION==false) {
-                if (interstitialAd.isLoaded() || interstitialAd.isLoading()) {
-                    interstitialAd.show();
-                    interstitialAd.setAdListener(new AdListener() {
-                        @Override
-                        public void onAdClosed() {
-                            // Code to be executed when the interstitial ad is closed.
-                            startActivity(intent);
-                        }
 
-                    });
-                } else {
-                    startActivity(intent);
-                }
-            }else{
-                startActivity(intent);
+        if (myDB.getTableWordsLenght()>0) {
+            if (myDB.getTableWordsOKLenght() > 0) {
+                alertDialogloadall(); // load all words
+            } else {
+                Intent intencja = new Intent(ActivityWordList.this, ActivityWords.class);
+                intencja.putExtra("mmsgdlg", true);
+                startActivity(intencja);
             }
-
+        }else{
+            alertDialognodata();
         }
+
     }
     //alert dialog pytajacy czy chcemy powtorzyc wszystkie slowka czy tez wyswietlic tylko te ktorych nie pamiętamy
-    private void alertDialog() {
+    private void alertDialogloadall() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this,R.style.AppCompatAlertDialogStyle);
         String load= getString(R.string.wordslloadall);
         String yes=getString(R.string.wordslloadyes);
@@ -220,25 +180,10 @@ public class ActivityWordList extends Activity {
         builder.setPositiveButton(yes, new DialogInterface.OnClickListener() {
 
             public void onClick(DialogInterface dialog, int which) {
-                final Intent intent =new Intent(ActivityWordList.this,ActivityWords.class);
-                intent.putExtra("mmsgdlg",true);
-                if (BuildConfig.PAID_VERSION==false) {
-                    if (interstitialAd.isLoaded() || interstitialAd.isLoading()) {
-                        interstitialAd.show();
-                        interstitialAd.setAdListener(new AdListener() {
-                            @Override
-                            public void onAdClosed() {
-                                // Code to be executed when the interstitial ad is closed.
-                                startActivity(intent);
-                            }
+                Intent intencja =new Intent(ActivityWordList.this,ActivityWords.class);
+                intencja.putExtra("mmsgdlg",true);
+                startActivity(intencja);
 
-                        });
-                    } else {
-                        startActivity(intent);
-                    }
-                }else{
-                    startActivity(intent);
-                }
                 dialog.dismiss();
             }
 
@@ -256,6 +201,20 @@ public class ActivityWordList extends Activity {
             }
         });
 
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+    private void alertDialognodata() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this,R.style.AppCompatAlertDialogStyle);
+        String load= getString(R.string.wordslloaderror);
+        String ok=getString(R.string.wordslloadok);
+        builder.setMessage(""+load);
+        builder.setNeutralButton(ok, new DialogInterface.OnClickListener() {
+
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
         AlertDialog alert = builder.create();
         alert.show();
     }
@@ -316,13 +275,13 @@ public class ActivityWordList extends Activity {
     // zapisanie danych do PLIKU - pliku JSON
     protected void onDestroy() {
         super.onDestroy();
-           zlobp = new StringToJSON(package_name);
+        stringToJSON = new StringToJSON(package_name);
         String mfolder ="";
         if (package_own==0) {
             String arr[] = flag_source.split("/", 3);
             mfolder = arr[1];
         }
-           zlobp.SaveDATA(mswipeArraylistData,mfolder);
+        stringToJSON.SaveDATA(mswipeArraylistData,mfolder);
         closeDB();
     }
 
@@ -339,6 +298,7 @@ public class ActivityWordList extends Activity {
     @Override
     protected void onRestart() {
         super.onRestart();
+        Log.d("onRester","onRester");
         onCreate(Bundle.EMPTY);
     }
 }

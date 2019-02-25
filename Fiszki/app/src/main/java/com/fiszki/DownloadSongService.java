@@ -12,6 +12,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Environment;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.webkit.MimeTypeMap;
 import android.webkit.URLUtil;
 
@@ -68,6 +69,7 @@ public class DownloadSongService extends IntentService {
           }
         File file = new File(directoryName, filename);
         if (file.exists()){
+            Log.d("plik istnieje ","plik istnieje");
         }else {
             FileOutputStream stream = null;
             try {
@@ -140,7 +142,7 @@ public class DownloadSongService extends IntentService {
         PendingIntent pendingIntent =
                 stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
         Notification notification = new Notification.Builder(this)
-                .setSmallIcon(R.drawable.ic_launcher_foreground)
+                .setSmallIcon(R.drawable.backgroundanswer)
                 .setContentTitle(getString(R.string.app_name))
                 .setAutoCancel(true)
                 .setPriority(Notification.PRIORITY_MAX)

@@ -18,11 +18,9 @@ import android.widget.ImageView;
 
 import java.io.File;
 import java.util.ArrayList;
-
 import com.fiszki.Adapter.OnSwipeListItemClickListener;
 import com.fiszki.Adapter.SwipeListAdapter;
 import com.fiszki.Adapter.SwipeListView;
-
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -49,11 +47,11 @@ public class ActivityWordPackage extends Activity {
                 Intent inencja = new Intent(getBaseContext(),ActivityWordList.class);
                 mcursor.moveToPosition(index);
                 Log.d("indeks = ","indeks = "+index+ "||" +mcursor.getString(1));
-                ViewHolder.package_name=mcursor.getString(1);//tutaj oszukuje ?!!!!!!
+                ZDataPackage.package_name=mcursor.getString(1);//
                 inencja.putExtra("package_name",mcursor.getString(1));
-                ViewHolder.flag_source=mcursor.getString(2);//tutaj oszukuje ?!!!!!!
+                ZDataPackage.flag_source=mcursor.getString(2);//
                 inencja.putExtra("flag_source",mcursor.getString(2));
-                ViewHolder.package_own=mcursor.getInt(3);//tutaj oszukuje ?!!!!!!
+                ZDataPackage.package_own=mcursor.getInt(3);//
                 inencja.putExtra("package_own",mcursor.getInt(3));
                 startActivity(inencja);
             }
