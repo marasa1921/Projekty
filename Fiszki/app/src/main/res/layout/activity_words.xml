@@ -46,7 +46,6 @@ tools:context=".ActivityWords">
 
 
 
-
 <ViewFlipper
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
@@ -74,17 +73,16 @@ tools:context=".ActivityWords">
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 <Button
+    android:id="@+id/wordsBTyes"
     android:text="@string/wordslistyes"
     android:onClick="onClickYes"
-    android:id="@+id/wordsBTyes"
     android:layout_height="@dimen/dp60"
     android:layout_width="@dimen/dp150"
-
     />
 <Button
+    android:id="@+id/wordsBTNo"
     android:text="@string/wordslloadno"
     android:onClick="onClickNo"
-    android:id="@+id/wordsBTno"
     android:layout_height="@dimen/dp60"
     android:layout_width="@dimen/dp150"/>
 </LinearLayout>

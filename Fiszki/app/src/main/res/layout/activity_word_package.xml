@@ -10,12 +10,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <com.fiszki.Adapter.SwipeListView
+        <com.fiszki.SwipeListAdapter.SwipeListView
             android:splitMotionEvents="false"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/wordpackageSLV">
-        </com.fiszki.Adapter.SwipeListView>
+        </com.fiszki.SwipeListAdapter.SwipeListView>
     </FrameLayout>
 
 

@@ -5,8 +5,8 @@
         <item>Info</item>
         <item>Exit</item>
     </string-array>
-    <string name="ipadres">maras1921.cba.pl</string>
-    <string name="downloadadres">http://maras1921.cba.pl/</string>
+    <string name="ipadres">192.168.64.2</string>
+    <string name="downloadadres">http://192.168.64.2/</string>
     <string name="addpackagename">Dodaj nowy pakiet</string>
     <string name="addpackageERROR">BRAK NAZWY</string>
     <string name="addpackageBT">DODAJ</string>

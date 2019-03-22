@@ -39,7 +39,7 @@
         <activity android:name=".ActivityWordPackage"
             android:label=""
             />
-        <activity android:name=".MainActivity"
+        <activity android:name=".ActivityMain"
             >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -48,7 +48,7 @@
             </intent-filter>
         </activity>
         <service
-            android:name=".DownloadSongService"
+            android:name=".DownloadService.DownloadService"
             android:enabled="true"
             android:exported="false" />
 

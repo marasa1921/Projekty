@@ -18,14 +18,17 @@ import android.widget.ImageView;
 
 import java.io.File;
 import java.util.ArrayList;
-import com.fiszki.Adapter.OnSwipeListItemClickListener;
-import com.fiszki.Adapter.SwipeListAdapter;
-import com.fiszki.Adapter.SwipeListView;
+
+import com.fiszki.SwipeListAdapter.OnSwipeListItemClickListener;
+import com.fiszki.SwipeListAdapter.SwipeListAdapter;
+import com.fiszki.SwipeListAdapter.SwipeListView;
+import com.fiszki.Database.DBAdapter;
+
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class ActivityWordPackage extends Activity {
-    private DBAdapter               myDB;
+    private DBAdapter myDB;
     private Cursor                  mcursor;
     private SwipeListView           mswipemenulistView;
     private ListAdapter             mswipemenulistAdapter;
@@ -69,7 +72,7 @@ public class ActivityWordPackage extends Activity {
                         long i = mcursor.getLong(0);
 
                         int mownpackage = mcursor.getInt(3);
-                        if (mownpackage==0) {
+                        if (0==mownpackage) {
                             String mcursor1 = mcursor.getString(1);
                             String mystring = mcursor.getString(2);
                             String arr[] = mystring.split("/", 3);
@@ -125,7 +128,7 @@ public class ActivityWordPackage extends Activity {
       if (item.getItemId()==R.id.wordpackageBTcreate){
           showadddialog();
       }else{
-          Intent intent = new Intent(getBaseContext(),MainActivity.class);
+          Intent intent = new Intent(getBaseContext(), ActivityMain.class);
           startActivity(intent);
       }
         return super.onOptionsItemSelected(item);
@@ -210,13 +213,11 @@ public class ActivityWordPackage extends Activity {
     }
 
     private void openDB() {
-        // TODO Auto-generated method stub
         myDB = new DBAdapter(this);
         myDB.open();
     }
 
     private void closeDB() {
-        // TODO Auto-generated method stub
         myDB.close();
     }
 

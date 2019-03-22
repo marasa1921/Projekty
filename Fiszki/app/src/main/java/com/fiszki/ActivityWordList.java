@@ -1,32 +1,33 @@
 
-        package com.fiszki;
+package com.fiszki;
 
-        import android.app.Activity;
-        import android.content.DialogInterface;
-        import android.content.Intent;
-        import android.database.Cursor;
-        import android.os.Bundle;
-        import android.support.v7.app.AlertDialog;
-        import android.util.Log;
-        import android.view.Menu;
-        import android.view.MenuItem;
-        import android.view.View;
-        import android.view.ViewGroup;
-        import android.widget.Button;
-        import android.widget.TextView;
+import android.app.Activity;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.database.Cursor;
+import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
 
-        import com.fiszki.Adapter.OnSwipeListItemClickListener;
-        import com.fiszki.Adapter.SwipeListAdapter;
-        import com.fiszki.Adapter.SwipeListView;
+import com.fiszki.SwipeListAdapter.OnSwipeListItemClickListener;
+import com.fiszki.SwipeListAdapter.SwipeListAdapter;
+import com.fiszki.SwipeListAdapter.SwipeListView;
+import com.fiszki.Database.DBAdapter;
 
-        import java.util.ArrayList;
+import java.util.ArrayList;
 
 public class ActivityWordList extends Activity {
     /////////SLIDE MENU///////////////
     private SwipeListView       mswipelistView;
     private ListAdapter         mswipelistAdapter;
     private ArrayList<Packages> mswipeArraylistData;
-    private DBAdapter           myDB;
+    private DBAdapter myDB;
     private Cursor              mcursor;
     private StringToJSON        stringToJSON;
     private String              package_name,flag_source;
@@ -161,7 +162,7 @@ public class ActivityWordList extends Activity {
                 alertDialogloadall(); // load all words
             } else {
                 Intent intencja = new Intent(ActivityWordList.this, ActivityWords.class);
-                intencja.putExtra("mmsgdlg", true);
+                intencja.putExtra("mesagedialogloadallwords", true);
                 startActivity(intencja);
             }
         }else{
@@ -181,7 +182,7 @@ public class ActivityWordList extends Activity {
 
             public void onClick(DialogInterface dialog, int which) {
                 Intent intencja =new Intent(ActivityWordList.this,ActivityWords.class);
-                intencja.putExtra("mmsgdlg",true);
+                intencja.putExtra("mesagedialogloadallwords",true);
                 startActivity(intencja);
 
                 dialog.dismiss();
@@ -194,7 +195,7 @@ public class ActivityWordList extends Activity {
 
             public void onClick(DialogInterface dialog, int which) {
                 Intent intencja =new Intent(ActivityWordList.this,ActivityWords.class);
-                intencja.putExtra("mmsgdlg",false);
+                intencja.putExtra("mesagedialogloadallwords",false);
                 startActivity(intencja);
 
                 dialog.dismiss();
@@ -261,15 +262,11 @@ public class ActivityWordList extends Activity {
         }
 
     }
-    //otwieranie bazy danych
     private void openDB() {
-        // TODO Auto-generated method stub
         myDB = new DBAdapter(this);
         myDB.open();
     }
-    // zamykanie bazy danych
     private void closeDB() {
-        // TODO Auto-generated method stub
         myDB.close();
     }
     // zapisanie danych do PLIKU - pliku JSON

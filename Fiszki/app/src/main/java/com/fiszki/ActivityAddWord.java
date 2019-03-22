@@ -4,24 +4,27 @@ import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.fiszki.Database.DBAdapter;
+
 public class ActivityAddWord extends Activity {
-    private DBAdapter   myDB;
-    private EditText    mETlg1,mETlg2;
-    private String      mlg1,mlg2;
+    private DBAdapter myDB;
+    private EditText    mETlenguage1;
+    private EditText    mETlanguage2;
+    private String      mlanguage1;
+    private String      mlanguage2;
     private Cursor      cursor;
     private int         index =-1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_word);
-        mETlg1 =(EditText) findViewById(R.id.addwordETlg1);
-        mETlg2 =(EditText) findViewById(R.id.addwordETlg2);
+        mETlenguage1 =(EditText) findViewById(R.id.addwordETlg1);
+        mETlanguage2 =(EditText) findViewById(R.id.addwordETlg2);
         openDB();
         cursor = myDB.getTableWordsAllRows();
 
@@ -31,8 +34,8 @@ public class ActivityAddWord extends Activity {
             index = (int) intent.getExtras().get("index");
             if (index>=0) {
                 cursor.moveToPosition(index);
-                mETlg1.setText(cursor.getString(1));
-                mETlg2.setText(cursor.getString(2));
+                mETlenguage1.setText(cursor.getString(1));
+                mETlanguage2.setText(cursor.getString(2));
             }
         }
 
@@ -40,9 +43,9 @@ public class ActivityAddWord extends Activity {
 
     public void onClickAddtoBase(View view) {
 
-        mlg1 = mETlg1.getText().toString();
-        mlg2 = mETlg2.getText().toString();
-        if (mlg1.isEmpty()|mlg2.isEmpty()){
+        mlanguage1 = mETlenguage1.getText().toString();
+        mlanguage2 = mETlanguage2.getText().toString();
+        if (mlanguage1.isEmpty()|mlanguage2.isEmpty()){
             Toast t;
             t= Toast.makeText(getBaseContext(),getText(R.string.addworderror),Toast.LENGTH_SHORT);
             t.show();
@@ -50,15 +53,16 @@ public class ActivityAddWord extends Activity {
 
             if (index < 0) {
                 cursor.moveToLast();
-                myDB.insertTableWordstRow(mlg1, mlg2, 0);
-                mETlg1.setText("");
-                mETlg2.setText("");
+                myDB.insertTableWordstRow(mlanguage1, mlanguage2, 0);
+                mETlenguage1.setText("");
+                mETlanguage2.setText("");
             } else {
 
-                if (!mlg1.equals("") & !mlg2.equals("")) {
+                if (!mlanguage1.equals("") & !mlanguage2.equals("")) {
                     cursor.moveToPosition(index);
-                    myDB.updateTableWordsRow(cursor.getInt(0), mlg1, mlg2, 0);
+                    myDB.updateTableWordsRow(cursor.getInt(0), mlanguage1, mlanguage2, 0);
                     Intent intent = new Intent(getBaseContext(), ActivityWordList.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
                 }
             }
@@ -73,13 +77,11 @@ public class ActivityAddWord extends Activity {
     }
 
     private void openDB() {
-        // TODO Auto-generated method stub
         myDB = new DBAdapter(this);
         myDB.open();
     }
 
     private void closeDB() {
-        // TODO Auto-generated method stub
         cursor.close();
         myDB.close();
     }
@@ -90,9 +92,15 @@ public class ActivityAddWord extends Activity {
     }
     public boolean onOptionsItemSelected(MenuItem item){
         Intent myIntent = new Intent(getApplicationContext(), ActivityWordList.class);
-        myIntent.putExtra("fromDB_change","ss");
+        myIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivityForResult(myIntent, 0);
         return true;
+    }
+    @Override
+    public void onBackPressed(){
+        Intent myIntent = new Intent(getApplicationContext(), ActivityWordList.class);
+        myIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivityForResult(myIntent, 0);
     }
 
 

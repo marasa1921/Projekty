@@ -15,6 +15,9 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.MenuItem;
 
+import com.fiszki.HelpClasses.DirectoryHelper;
+import com.fiszki.MainMenu.CaptionedImagesAdapterMain;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -31,7 +34,8 @@ import java.net.URL;
 public class ActivityDownloadCountry extends Activity {
     private static final int                mWRITE_EXTERNAL_STORAGE_REQUEST_CODE = 54654;
     private RecyclerView                    mRVcountry;
-    private String                          msiglerowJSON="",mdataJSON="";
+    private String                          msiglerowJSON="";
+    private String                          mdatadownloadJSON="";
     private String []                       mDowloadCountryDescrition;
     private String []                       mDowloadCountryImgsrc;
     private CaptionedImagesAdapterMain mcaptionedImagesAdapter;
@@ -65,7 +69,7 @@ public class ActivityDownloadCountry extends Activity {
                     //połączenie z plikiem na serwerze i pobranie danych
                     String downloadadres=""+getString(R.string.downloadadres);
 
-                    URL url = new URL(downloadadres+"zlopenkrajedownload.php");
+                    URL url = new URL(downloadadres+"downloadcountry.php");
                     HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
                     InputStream inputStream = httpURLConnection.getInputStream();
                     BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
@@ -73,10 +77,10 @@ public class ActivityDownloadCountry extends Activity {
                     //wyciągnięcie danyh z buuferReadera do Stringa
                     while (msiglerowJSON != null){
                         msiglerowJSON = bufferedReader.readLine();
-                        mdataJSON = mdataJSON + msiglerowJSON;
+                        mdatadownloadJSON = mdatadownloadJSON + msiglerowJSON;
                     }
                     //utworzenie tablicy JSONrray
-                    JSONArray JA = new JSONArray(mdataJSON);
+                    JSONArray JA = new JSONArray(mdatadownloadJSON);
                     //deklaracja tablic z wielkościa pobranych danych
                     mDowloadCountryDescrition = new String[JA.length()];
                     mDowloadCountryImgsrc = new String[JA.length()];
@@ -84,7 +88,7 @@ public class ActivityDownloadCountry extends Activity {
                     for (int i=0;i<JA.length();i++){
                         JSONObject JO = (JSONObject) JA.get(i);
                         mDowloadCountryDescrition[i] = JO.getString("name");
-                        mDowloadCountryImgsrc[i] =getText(R.string.downloadadres)+JO.getString("img");/// uwaga tu może być błąd
+                        mDowloadCountryImgsrc[i] =getText(R.string.downloadadres)+JO.getString("img");
                     }
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
@@ -110,11 +114,9 @@ public class ActivityDownloadCountry extends Activity {
                 mcaptionedImagesAdapter.setListener(new CaptionedImagesAdapterMain.Listener() {
                     @Override
                     public void onClick(int position) {
-                        //?????????????????????
-                        Log.d("pozycja = ",""+position);
                           Intent intent = new Intent(getBaseContext(), ActivityDownloadPackage.class);
                           intent.putExtra("lgnumber",position);
-                          intent.putExtra("lenguagename",mDowloadCountryDescrition[position]);
+                          intent.putExtra("languagename",mDowloadCountryDescrition[position]);
                           startActivity(intent);
                     }
                 });
@@ -134,8 +136,14 @@ public class ActivityDownloadCountry extends Activity {
         }
     }
     public boolean onOptionsItemSelected(MenuItem item){
-        Intent myIntent = new Intent(getApplicationContext(), MainActivity.class);
+        Intent myIntent = new Intent(getApplicationContext(), ActivityMain.class);
         startActivityForResult(myIntent, 0);
         return true;
     }
+    @Override
+    public void onBackPressed(){
+        Intent myIntent = new Intent(getApplicationContext(), ActivityMain.class);
+        startActivityForResult(myIntent, 0);
+    }
+
 }
